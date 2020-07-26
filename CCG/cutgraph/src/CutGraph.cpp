@@ -30,7 +30,6 @@ void MeshLib::CCutGraph::_dual_spanning_tree()
 		CCutGraphEdge* pE = *eiter;
 		pE->sharp() = false;
 
-		//insert your code here
 	}
 
 	// Mark all touched flags false, and select a face
@@ -39,7 +38,6 @@ void MeshLib::CCutGraph::_dual_spanning_tree()
 	{
 		CCutGraphFace* pF = *fiter;
 		pF->touched() = false;
-		//insert your code here
 		//pHeadFace = pF;
 	}
 	pHeadFace = *CCutGraphMesh::MeshFaceIterator(m_pMesh);
@@ -78,10 +76,8 @@ void MeshLib::CCutGraph::_dual_spanning_tree()
 							pE->sharp() = true;
 						}
 
-						//insert your code here
 					}
 
-					//insert your code here
 				}
 			}
 		}
@@ -113,7 +109,6 @@ void MeshLib::CCutGraph::_prune()
 			{
 				pV->valence()++;
 			}
-			//insert your code here
 		}
 
 		if (pV->valence() == 1)
@@ -139,7 +134,6 @@ void MeshLib::CCutGraph::_prune()
 					vQueue.push(pW);
 				}
 				pE->sharp() = false;
-				//insert your code here
 				break;
 			}
 		}

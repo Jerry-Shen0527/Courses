@@ -20,7 +20,7 @@ int g_button;
 int g_startx, g_starty;
 int g_shade_flag = 0;
 bool g_show_mesh = true;
-bool g_show_uv = false;
+bool g_show_uv = true;
 
 /* rotation quaternion and translation vector for the object */
 CQrot g_obj_rot(0, 0, 1, 0);

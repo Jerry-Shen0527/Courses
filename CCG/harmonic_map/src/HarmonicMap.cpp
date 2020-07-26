@@ -4,6 +4,7 @@
 #include <Eigen/Sparse>
 
 #include "HarmonicMap.h"
+#include <cmath>
 
 #ifndef M_PI
 #define M_PI 3.141592653589793238462643383279
@@ -26,8 +27,10 @@ void MeshLib::CHarmonicMap::set_mesh(CHarmonicMapMesh* pMesh)
 		M::CVertex* pV = *viter;
 		if (pV->boundary())
 			continue;
-		//insert your code here
+		else pV->uv() = CPoint2(0, 0);
 	}
+	//iterative_map(0.0001);
+	map();
 }
 
 double MeshLib::CHarmonicMap::step_one()
@@ -54,7 +57,11 @@ double MeshLib::CHarmonicMap::step_one()
 		{
 			M::CVertex* pW = *vviter;
 			M::CEdge* pE = m_pMesh->vertexEdge(pV, pW);
-			//insert your code here
+			auto w = pE->weight();
+
+			sw += w;
+
+			suv += pW->uv() * w;
 		}
 		suv /= sw;
 
@@ -132,12 +139,24 @@ void MeshLib::CHarmonicMap::map()
 			M::CEdge* e = m_pMesh->vertexEdge(pV, pW);
 			double w = e->weight();
 
-			//insert your code here
+			sw += w;
+
+			if (pW->boundary())
+			{
+				B_coefficients.emplace_back(vid, wid, w);
+			}
+			else
+			{
+				A_coefficients.emplace_back(vid, wid, -w);
+			}
+			
 			//construct one element of the matrix A and B, using
 			//Eigen::Triplet<double>(i,j, val)
 			//there push_back the triplet to A or B coefficients
 		}
-		//insert the diagonal element
+
+		A_coefficients.emplace_back(vid, vid, sw);
+		
 	}
 
 	Eigen::SparseMatrix<double> A(interior_vertices, interior_vertices);
@@ -210,35 +229,42 @@ void MeshLib::CHarmonicMap::_calculate_edge_weight()
 	{
 		M::CFace* pF = *fiter;
 		M::CHalfEdge* pH[3];
-		//insert your code here
 		//use inverse cosine law to compute the corner angles
 
 		auto he = pF->halfedge();
 		for (int i = 0; i < 3; ++i)
 		{
 			pH[i] = static_cast<M::CHalfEdge*>(he->he_next());
+			he = he->he_next();
 		}
 
-		double 
-		
-		for (auto p_h : pH)
-		{
-			static_cast<M::CEdge*> (p_h->edge())->length();
-			
-			p_h->angle();
-		}
+		double a = static_cast<M::CEdge*> (pH[0]->edge())->length();
+		double b = static_cast<M::CEdge*> (pH[1]->edge())->length();
+		double c = static_cast<M::CEdge*> (pH[2]->edge())->length();
+
+		static_cast<M::CHalfEdge*>(pH[0])->angle() = _inverse_cosine_law(b, c, a);
+		static_cast<M::CHalfEdge*>(pH[1])->angle() = _inverse_cosine_law(c, a, b);
+		static_cast<M::CHalfEdge*>(pH[2])->angle() = _inverse_cosine_law(a, b, c);
 	}
 
 	// 3. compute edge weight
 	for (M::MeshEdgeIterator eiter(m_pMesh); !eiter.end(); ++eiter)
 	{
 		M::CEdge* pE = *eiter;
-		//insert your code here
 		//set cotangent edge weight
+
+		if (pE->boundary())
+		{
+			pE->weight() = 1 / tan(static_cast<M::CHalfEdge*>(pE->halfedge(0))->angle());
+		}
+		else
+		{
+			pE->weight() = (1 / tan(static_cast<M::CHalfEdge*>(pE->halfedge(0))->angle()) + 1 / tan(static_cast<M::CHalfEdge*>(pE->halfedge(1))->angle()))/2.0;
+		}
 	}
 }
 
-void MeshLib::CHarmonicMap::_set_boundary()
+void MeshLib::CHarmonicMap::_set_boundary() const
 {
 	using M = CHarmonicMapMesh;
 
@@ -275,7 +301,7 @@ void MeshLib::CHarmonicMap::_set_boundary()
 	}
 }
 
-double MeshLib::CHarmonicMap::_inverse_cosine_law(double a, double b, double c)
+double MeshLib::CHarmonicMap::_inverse_cosine_law(double a, double b, double c) const
 {
 	double cs = (a * a + b * b - c * c) / (2.0 * a * b);
 	assert(cs <= 1.0 && cs >= -1.0);
