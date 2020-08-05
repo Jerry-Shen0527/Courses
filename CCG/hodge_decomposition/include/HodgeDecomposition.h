@@ -44,6 +44,7 @@ class CHodgeDecomposition
     /*! exterior differentiation operator */
     void _d(int dimension);
 
+
     /*! delta operator */
     void _delta(int dimension);
 
