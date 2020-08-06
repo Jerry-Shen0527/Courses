@@ -683,7 +683,7 @@ void MeshLib::CHodgeDecomposition::_set_boundary_condition(int bid)
 			M::CHalfEdge* ph = *hiter;
 			M::CVertex* pv = m_pMesh->halfedgeTarget(ph);
 			pv->form() = (i == bid) ? -1 : 0;
-		}
+		}	
 	}
 }
 
