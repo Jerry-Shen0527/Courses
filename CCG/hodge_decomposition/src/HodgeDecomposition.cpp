@@ -695,6 +695,8 @@ void MeshLib::CHodgeDecomposition::exact_harmonic_form(int bnd_id)
 	_calculate_edge_weight(true);
 	_exact_harmonic_form();
 	_d(0);
+	//Here we get an exact one form. Why is it coclosed?
+	
 	_test_closedness();
 	_test_coclosedness();
 	_normalize();
