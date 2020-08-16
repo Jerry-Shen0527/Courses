@@ -499,8 +499,8 @@ void MeshLib::CHodgeDecomposition::_remove_coexact_form()
 			auto sym = static_cast<M::CHalfEdge*> (he->he_sym());
 
 			double sym_area = 0;
-			
-			if (sym!=nullptr)
+
+			if (sym != nullptr)
 			{
 				sym_area = static_cast<M::CFace*>(sym->face())->form();
 			}
@@ -683,7 +683,7 @@ void MeshLib::CHodgeDecomposition::_set_boundary_condition(int bid)
 			M::CHalfEdge* ph = *hiter;
 			M::CVertex* pv = m_pMesh->halfedgeTarget(ph);
 			pv->form() = (i == bid) ? -1 : 0;
-		}	
+		}
 	}
 }
 
@@ -696,7 +696,8 @@ void MeshLib::CHodgeDecomposition::exact_harmonic_form(int bnd_id)
 	_exact_harmonic_form();
 	_d(0);
 	//Here we get an exact one form. Why is it coclosed?
-	
+	//It is not. We only use it to get one base of harmonic form.
+
 	_test_closedness();
 	_test_coclosedness();
 	_normalize();
