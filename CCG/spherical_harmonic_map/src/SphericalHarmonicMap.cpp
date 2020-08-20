@@ -89,18 +89,24 @@ double MeshLib::CSphericalHarmonicMap::step_one(int steps, double step_length)
 			{
 				M::CVertex* vertex = *vviter;
 				auto edge = m_pMesh->vertexEdge(pV, vertex);
+				auto w = edge->weight();
 
-				laplacian += (vertex->u() - pV->u()) * edge->weight();
+				auto u = pV->u();
+				auto v = vertex->u();
+
+				laplacian += (v - u) * w;
 			}
 			auto normal_part = pV->u() * (laplacian * pV->u());
 			auto tangent_part = laplacian - normal_part;
 
-			pV->u() += tangent_part;
+
+			pV->u() += tangent_part * step_length * 0.1;
 
 			pV->u() /= pV->u().norm();
 		}
 	}
 	// 6. normalize the mapping, such that mass center is at the origin
+	_normalize();
 	// 7. compute the harmonic energy
 	double E = _calculate_harmonic_energy();
 	std::cout << "After " << steps << " steps, harmonic energy is " << E << std::endl;
@@ -229,5 +235,6 @@ void MeshLib::CSphericalHarmonicMap::_normalize()
 	{
 		auto ptr = *viter;
 		ptr->u() -= center;
+		ptr->u() /= ptr->u().norm();
 	}
 }
