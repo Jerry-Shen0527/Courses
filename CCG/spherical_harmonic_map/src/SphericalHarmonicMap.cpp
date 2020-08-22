@@ -100,7 +100,7 @@ double MeshLib::CSphericalHarmonicMap::step_one(int steps, double step_length)
 			auto tangent_part = laplacian - normal_part;
 
 
-			pV->u() += tangent_part * step_length * 0.1;
+			pV->u() += tangent_part * step_length*0.1;
 
 			pV->u() /= pV->u().norm();
 		}
