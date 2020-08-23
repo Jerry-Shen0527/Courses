@@ -10,14 +10,15 @@
 
 #include <map>
 #include <vector>
+#include <complex>
 
 #include "Mesh/BaseMesh.h"
 #include "Mesh/Vertex.h"
 #include "Mesh/HalfEdge.h"
 #include "Mesh/Edge.h"
 #include "Mesh/Face.h"
-#include "mesh/iterators.h"
-#include "mesh/boundary.h"
+#include "Mesh/Iterators.h"
+#include "Mesh/Boundary.h"
 #include "Parser/parser.h"
 
 #define VERTEX_RGB     (0x01<<0)
@@ -43,7 +44,7 @@ namespace MeshLib
 template<typename M, typename V, typename E, typename F, typename H>
 void _read_vertex_target_k( M * pMesh )
 {
-	for( M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
+	for(typename M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
 	{
 		V * pV = *viter;
 		CParser parser( pV->string() );
@@ -64,7 +65,7 @@ void _read_vertex_target_k( M * pMesh )
 template<typename M, typename V, typename E, typename F, typename H>
 void _write_vertex_uv( M * pMesh )
 {
-	for( M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
+	for(typename M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
 	{
 		V * pV = *viter;
 		CPoint2 uv = pV->uv();
@@ -89,9 +90,9 @@ void _write_vertex_uv( M * pMesh )
 template<typename M>
 void _write_vertex_huv( M * pMesh )
 {
-	for( M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
+	for(typename M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
 	{
-		M::CVertex * pV = *viter;
+		typename M::CVertex * pV = *viter;
 		CPoint2 uv = pV->huv();
 
 		CParser parser( pV->string() );
@@ -114,7 +115,7 @@ void _write_vertex_huv( M * pMesh )
 template<typename M, typename V, typename E, typename F, typename H>
 void _read_vertex_uv( M * pMesh )
 {
-	for( M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
+	for(typename M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
 	{
 		V * pV = *viter;
 		CParser parser( pV->string() );
@@ -135,9 +136,9 @@ void _read_vertex_uv( M * pMesh )
 template<typename M>
 void __read_vertex_uv( M * pMesh )
 {
-	for( M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
+	for(typename M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
 	{
-		M::CVertex * pV = *viter;
+		typename M::CVertex * pV = *viter;
 		CParser parser( pV->string() );
 		
 		for( std::list<CToken*>::iterator iter = parser.tokens().begin() ; iter != parser.tokens().end(); ++ iter )
@@ -156,7 +157,7 @@ void __read_vertex_uv( M * pMesh )
 template<typename M, typename V, typename E, typename F, typename H>
 void _read_vertex_z( M * pMesh )
 {
-	for( M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
+	for(typename M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
 	{
 		V * pV = *viter;
 		CParser parser( pV->string() );
@@ -179,9 +180,9 @@ void _read_vertex_z( M * pMesh )
 template<typename M>
 void _read_vertex_huv( M * pMesh )
 {
-	for( M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
+	for(typename M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
 	{
-		M::CVertex * pV = *viter;
+		typename M::CVertex * pV = *viter;
 		CParser parser( pV->string() );
 		
 		for( std::list<CToken*>::iterator iter = parser.tokens().begin() ; iter != parser.tokens().end(); ++ iter )
@@ -200,7 +201,7 @@ void _read_vertex_huv( M * pMesh )
 template<typename M, typename V, typename E, typename F, typename H>
 void _read_vertex_father( M * pMesh )
 {
-	for( M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
+	for(typename M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
 	{
 		V * pV = *viter;
 		CParser parser( pV->string() );
@@ -220,9 +221,9 @@ void _read_vertex_father( M * pMesh )
 template<typename M>
 void _read_vertex_father_trait( M * pMesh )
 {
-	for( M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
+	for(typename M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
 	{
-		M::CVertex * pV = *viter;
+		typename M::CVertex * pV = *viter;
 		CParser parser( pV->string() );
 		
 		for( std::list<CToken*>::iterator iter = parser.tokens().begin() ; iter != parser.tokens().end(); ++ iter )
@@ -241,7 +242,7 @@ void _read_vertex_father_trait( M * pMesh )
 template<typename M, typename V, typename E, typename F, typename H>
 void _read_vertex_mu( M * pMesh )
 {
-	for( M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
+	for(typename M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
 	{
 		V * pV = *viter;
 		CParser parser( pV->string() );
@@ -262,7 +263,7 @@ void _read_vertex_mu( M * pMesh )
 template<typename M, typename V, typename E, typename F, typename H>
 void _read_vertex_normal( M * pMesh )
 {
-	for( M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
+	for(typename M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
 	{
 		V * pV = *viter;
 		CParser parser( pV->string() );
@@ -286,7 +287,7 @@ bool __read_vertex_normal( M * pMesh )
 {
 	bool has_normal = false;
 
-	for( M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
+	for(typename M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
 	{
 		typename M::CVertex * pV = *viter;
 		CParser parser( pV->string() );
@@ -310,7 +311,7 @@ bool __read_vertex_normal( M * pMesh )
 template<typename M, typename V, typename E, typename F, typename H>
 void _read_vertex_rgb( M * pMesh )
 {
-	for( M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
+	for(typename M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
 	{
 		V * pV = *viter;
 		CParser parser( pV->string() );
@@ -331,9 +332,9 @@ void _read_vertex_rgb( M * pMesh )
 template<typename M>
 void _read_vertex_rgb_trait( M * pMesh )
 {
-	for( M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
+	for(typename M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
 	{
-		M::CVertex * pV = *viter;
+		typename M::CVertex * pV = *viter;
 		CParser parser( pV->string() );
 		
 		for( std::list<CToken*>::iterator iter = parser.tokens().begin() ; iter != parser.tokens().end(); ++ iter )
@@ -352,7 +353,7 @@ void _read_vertex_rgb_trait( M * pMesh )
 template<typename M, typename V, typename E, typename F, typename H>
 void _read_edge_length( M * pMesh )
 {
-	for( M::MeshEdgeIterator eiter( pMesh ); !eiter.end(); eiter ++ )
+	for(typename M::MeshEdgeIterator eiter( pMesh ); !eiter.end(); eiter ++ )
 	{
 		E * pE = *eiter;
 
@@ -373,9 +374,9 @@ void _read_edge_length( M * pMesh )
 template<typename M>
 void _read_edge_length_trait( M * pMesh )
 {
-	for( M::MeshEdgeIterator eiter( pMesh ); !eiter.end(); eiter ++ )
+	for(typename M::MeshEdgeIterator eiter( pMesh ); !eiter.end(); eiter ++ )
 	{
-		M::CEdge * pE = *eiter;
+		typename M::CEdge * pE = *eiter;
 
 		CParser parser( pE->string() );
 
@@ -394,7 +395,7 @@ void _read_edge_length_trait( M * pMesh )
 template<typename M, typename V, typename E, typename F, typename H>
 void _read_edge_sharp( M * pMesh )
 {
-	for( M::MeshEdgeIterator eiter( pMesh ); !eiter.end(); eiter ++ )
+	for(typename M::MeshEdgeIterator eiter( pMesh ); !eiter.end(); eiter ++ )
 	{
 		E * pE = *eiter;
 
@@ -415,7 +416,7 @@ void _read_edge_sharp( M * pMesh )
 template<typename M, typename V, typename E, typename F, typename H>
 void _write_vertex_z( M * pMesh )
 {
-	for( M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
+	for(typename M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
 	{
 		V * pV = *viter;
 		CParser parser( pV->string() );
@@ -439,7 +440,7 @@ void _write_vertex_z( M * pMesh )
 template<typename M, typename V, typename E, typename F, typename H>
 void _write_vertex_mu( M * pMesh )
 {
-	for( M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
+	for(typename M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
 	{
 		V * pV = *viter;
 		CParser parser( pV->string() );
@@ -462,7 +463,7 @@ void _write_vertex_mu( M * pMesh )
 template<typename M, typename V, typename E, typename F, typename H>
 void _write_vertex_u( M * pMesh )
 {
-	for( M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
+	for(typename M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
 	{
 		V * pV = *viter;
 		CPoint rgb = pV->rgb();
@@ -486,7 +487,7 @@ void _write_vertex_u( M * pMesh )
 template<typename M, typename V, typename E, typename F, typename H>
 void _write_vertex_rgb( M * pMesh )
 {
-	for( M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
+	for(typename M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
 	{
 		V * pV = *viter;
 		CPoint rgb = pV->rgb();
@@ -511,9 +512,9 @@ void _write_vertex_rgb( M * pMesh )
 template<typename M>
 void _write_vertex_rgb_trait( M * pMesh )
 {
-	for( M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
+	for(typename M::MeshVertexIterator viter( pMesh ); !viter.end(); viter ++ )
 	{
-		M::CVertex * pV = *viter;
+		typename M::CVertex * pV = *viter;
 		CPoint rgb = pV->rgb();
 
 		CParser parser( pV->string() );
@@ -537,7 +538,7 @@ void _write_vertex_rgb_trait( M * pMesh )
 template<typename M, typename V, typename E, typename F, typename H>
 void _write_edge_sharp( M * pMesh )
 {
-	for( M::MeshEdgeIterator eiter( pMesh ); !eiter.end(); eiter ++ )
+	for(typename M::MeshEdgeIterator eiter( pMesh ); !eiter.end(); eiter ++ )
 	{
 		E * pE = *eiter;
 		CParser parser( pE->string() );
@@ -565,7 +566,7 @@ void _write_edge_sharp( M * pMesh )
 template<typename M, typename V, typename E, typename F, typename H>
 void _write_edge_du( M * pMesh )
 {
-	for( M::MeshEdgeIterator eiter( pMesh ); !eiter.end(); eiter ++ )
+	for(typename M::MeshEdgeIterator eiter( pMesh ); !eiter.end(); eiter ++ )
 	{
 		E * pE = *eiter;
 		CParser parser( pE->string() );
@@ -589,27 +590,27 @@ void _write_edge_du( M * pMesh )
 template<typename M, typename V, typename E, typename F, typename H>
 void _input_traits( M * pMesh )
 {
-	if( M->m_input_traits |= VERTEX_UV )
+	if( M::m_input_traits |= VERTEX_UV )
 	{
 		_read_vertex_uv<M,V,E,F,H>( pMesh );
 	}
 
-	if( M->m_input_traits |= VERTEX_NORMAL )
+	if( M::m_input_traits |= VERTEX_NORMAL )
 	{
 		_read_vertex_normal<M,V,E,F,H>( pMesh );
 	}
 
-	if( M->m_input_traits |= VERTEX_RGB )
+	if( M::m_input_traits |= VERTEX_RGB )
 	{
 		_read_vertex_rgb( pMesh );
 	}
 
-	if( M->m_input_traits |= EDGE_LENGTH )
+	if( M::m_input_traits |= EDGE_LENGTH )
 	{
 		_read_edge_length( pMesh );
 	}
 
-	if( M->m_input_traits |= EDGE_SHARP )
+	if( M::m_input_traits |= EDGE_SHARP )
 	{
 		_read_edge_sharp( pMesh );
 	}
@@ -619,32 +620,32 @@ void _input_traits( M * pMesh )
 template<typename M, typename V, typename E, typename F, typename H>
 void _output_traits( M * pMesh )
 {
-	if( M->m_m_output_traits |= VERTEX_UV )
+	if( M::m_m_output_traits |= VERTEX_UV )
 	{
 		_write_vertex_uv<M,V,E,F,H>( pMesh );
 	}
 
-	if( M->m_m_output_traits |= VERTEX_MU )
+	if( M::m_m_output_traits |= VERTEX_MU )
 	{
 		_write_vertex_mu<M,V,E,F,H>( pMesh );
 	}
 
-	if( M->m_m_output_traits |= VERTEX_RGB )
+	if( M::m_m_output_traits |= VERTEX_RGB )
 	{
 		_write_vertex_rgb<M,V,E,F,H>( pMesh );
 	}
 
-	if( M->m_m_output_traits |= VERTEX_U )
+	if( M::m_m_output_traits |= VERTEX_U )
 	{
 		_write_vertex_u<M,V,E,F,H>( pMesh );
 	}
 
-	if( M->m_m_output_traits |= EDGE_DU )
+	if( M::m_m_output_traits |= EDGE_DU )
 	{
 		_write_edge_du<M,V,E,F,H>( pMesh );
 	}
 
-	if( M->m_m_output_traits |= EDGE_SHARP )
+	if( M::m_m_output_traits |= EDGE_SHARP )
 	{
 		_write_edge_sharp<M,V,E,F,H>( pMesh );
 	}
@@ -654,9 +655,9 @@ void _output_traits( M * pMesh )
 template<typename M>
 void _write_edge_length_trait( M * pMesh )
 {
-	for( M::MeshEdgeIterator eiter( pMesh ); !eiter.end(); eiter ++ )
+	for(typename M::MeshEdgeIterator eiter( pMesh ); !eiter.end(); eiter ++ )
 	{
-		M::CEdge * pE = *eiter;
+		typename M::CEdge * pE = *eiter;
 		CParser parser( pE->string() );
 		parser._removeToken( "l" );
 		parser._toString( pE->string() );
@@ -675,9 +676,9 @@ void _write_edge_length_trait( M * pMesh )
 template<typename M>
 void _write_edge_sharp_trait( M * pMesh )
 {
-	for( M::MeshEdgeIterator eiter( pMesh ); !eiter.end(); eiter ++ )
+	for(typename M::MeshEdgeIterator eiter( pMesh ); !eiter.end(); eiter ++ )
 	{
-		M::CEdge * pE = *eiter;
+		typename M::CEdge * pE = *eiter;
 		CParser parser( pE->string() );
 		parser._removeToken( "sharp" );
 		parser._toString( pE->string() );
@@ -701,9 +702,9 @@ void _write_edge_sharp_trait( M * pMesh )
 template<typename M>
 void _read_face_mu( M * pMesh )
 {
-	for( M::MeshFaceIterator fiter( pMesh ); !fiter.end(); fiter ++ )
+	for(typename M::MeshFaceIterator fiter( pMesh ); !fiter.end(); fiter ++ )
 	{
-		M::CFace * pF = *fiter;
+		typename M::CFace * pF = *fiter;
 		CParser parser( pF->string() );
 		
 		for( std::list<CToken*>::iterator iter = parser.tokens().begin() ; iter != parser.tokens().end(); ++ iter )
@@ -722,9 +723,9 @@ void _read_face_mu( M * pMesh )
 template<typename M>
 void _write_face_mu( M * pMesh )
 {
-	for( M::MeshFaceIterator fiter( pMesh ); !fiter.end(); fiter ++ )
+	for(typename M::MeshFaceIterator fiter( pMesh ); !fiter.end(); fiter ++ )
 	{
-		M::CFace * pF = *fiter;
+		typename M::CFace * pF = *fiter;
 		CParser parser( pF->string() );
 		parser._removeToken( "mu" );
 

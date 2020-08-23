@@ -7,9 +7,8 @@
 
 #include "RgbImage.h"
 
-#ifndef RGBIMAGE_DONT_USE_OPENGL
-#include <windows.h>
-#include "GL/gl.h"
+#ifdef _WINDOWS
+#define _CRT_SECURE_NO_DEPRECATE
 #endif
 
 /*! RgbImage constructor
@@ -54,9 +53,8 @@ RgbImage::RgbImage( int numRows, int numCols )
 bool RgbImage::LoadBmpFile( const char* filename ) 
 {  
 	Reset();
-	FILE* infile;
-	errno_t er = fopen_s(&infile, filename, "rb");		// Open for reading binary data
-	if ( er != 0 ) {
+	FILE* infile = fopen(filename, "rb");		// Open for reading binary data
+	if (!infile) {
 		fprintf(stderr, "Unable to open file: %s\n", filename);
 		ErrorCode = OpenError;
 		return false;
@@ -187,9 +185,8 @@ void RgbImage::skipChars( FILE* infile, int numChars )
 	 */
 bool RgbImage::WriteBmpFile( const char* filename )
 {
-	FILE * outfile;
-	errno_t er = fopen_s( &outfile, filename, "wb" );		// Open for reading binary data
-	if ( er != 0 ) {
+	FILE * outfile = fopen( filename, "wb" );		// Open for reading binary data
+	if (!outfile) {
 		fprintf(stderr, "Unable to open file: %s\n", filename);
 		ErrorCode = OpenError;
 		return false;
@@ -341,46 +338,3 @@ unsigned char RgbImage::doubleToUnsignedChar( double x )
 // "long int" really means "unsigned long int"
 // Pixel data: 3 bytes per pixel: RGB values (in reverse order).
 //	Rows padded to multiples of four.
-
-#define RGBIMAGE_DONT_USE_OPENGL
-#ifndef RGBIMAGE_DONT_USE_OPENGL
-/*! Load the Bmp Image from OpenGL buffer
-*/
-bool RgbImage::LoadFromOpenglBuffer()					// Load the bitmap from the current OpenGL buffer
-{
-	int viewportData[4];
-	glGetIntegerv( GL_VIEWPORT, viewportData );
-	int& vWidth = viewportData[2];
-	int& vHeight = viewportData[3];
-	
-	if ( ImagePtr==0 ) { // If no memory allocated
-		NumRows = vHeight;
-		NumCols = vWidth;
-		ImagePtr = new unsigned char[NumRows*GetNumBytesPerRow()];
-		if ( !ImagePtr ) {
-			fprintf(stderr, "Unable to allocate memory for %ld x %ld buffer.\n", 
-					NumRows, NumCols);
-			Reset();
-			ErrorCode = MemoryError;
-			return false;
-		}
-	}
-	assert ( vWidth>=NumCols && vHeight>=NumRows );
-	int oldGlRowLen;
-	if ( vWidth>=NumCols ) {
-		glGetIntegerv( GL_UNPACK_ROW_LENGTH, &oldGlRowLen );
-		glPixelStorei( GL_UNPACK_ROW_LENGTH, NumCols );
-	}
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-
-	// Get the frame buffer data.
-	glReadPixels( 0, 0, NumCols, NumRows, GL_RGB, GL_UNSIGNED_BYTE, ImagePtr);
-
-	// Restore the row length in glPixelStorei  (really ought to restore alignment too).
-	if ( vWidth>=NumCols ) {
-		glPixelStorei( GL_UNPACK_ROW_LENGTH, oldGlRowLen );
-	}	
-	return true;
-}
-
-#endif   // RGBIMAGE_DONT_USE_OPENGL
