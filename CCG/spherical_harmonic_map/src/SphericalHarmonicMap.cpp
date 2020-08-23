@@ -75,11 +75,11 @@ double MeshLib::CSphericalHarmonicMap::step_one(int steps, double step_length)
 		for (M::MeshVertexIterator viter(m_pMesh); !viter.end(); ++viter)
 		{
 			M::CVertex* pV = *viter;
-			//insert your code here
+			//isert your code here
 
 			// 1. compute vertex laplacian
 			// 2. get the noraml component
-			// 3. get the tangent_component
+			// 3. get the tangent_component 
 			// 4. update u
 			// 5. normalize the vertex->u() to the unit sphere
 
@@ -219,7 +219,7 @@ void MeshLib::CSphericalHarmonicMap::_normalize()
 	CPoint center(0, 0, 0);
 	double area = 0;
 
-	//insert your code here
+	//isert your code here
 	//move the mass center of vertex->u() to the origin
 
 	CPoint centre(0, 0, 0);

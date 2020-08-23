@@ -11,6 +11,8 @@
 #define _DETRI2_OMTMESH_
 
 #include <vector>
+#include <Geometry/Polygon3D.h>
+
 
 #include "omt_detri2.h"
 
