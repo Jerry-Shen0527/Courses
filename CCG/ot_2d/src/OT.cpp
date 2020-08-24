@@ -162,10 +162,9 @@ namespace MeshLib
 			//isert your code here,
 			//compute the gradient for each vertex
 
-			double gradient = 0;
-			gradient = pv->target_area() - pv->dual_area();
+			double gradient = pv->target_area() - pv->dual_area();
 
-			m_gradient[pv->index()] = gradient;
+			m_gradient[pv->index()] = -gradient;
 		}
 
 		/* compute the Hessian matrix */
@@ -232,7 +231,7 @@ namespace MeshLib
 			COMTMesh::CVertex* pv1 = mesh.edgeVertex1(pe);
 			COMTMesh::CVertex* pv2 = mesh.edgeVertex2(pe);
 
-			weight = pe->dual_length() / pe->length();
+			weight = -pe->dual_length() / pe->length();
 
 			int ids = pv1->index();
 			int idt = pv2->index();
@@ -251,7 +250,7 @@ namespace MeshLib
 				//compute the diagonal element in Hessian matrix
 				double weight = 0.0;
 
-				weight = pe->dual_length() / pe->length();
+				weight = -pe->dual_length() / pe->length();
 
 				sum += weight;
 			}

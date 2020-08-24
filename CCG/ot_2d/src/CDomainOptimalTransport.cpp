@@ -71,10 +71,10 @@ namespace MeshLib
 			COMTMesh::CVertex* pv = *viter;
 			//isert your code here
 			//to compute the gradient
-			double grad = 0.0;
-			grad = pv->target_area() - pv->dual_area();
 
-			pv->update_direction() = grad;
+			double grad = pv->target_area() - pv->dual_area();
+
+			pv->update_direction() = -grad;
 		}
 
 		/*! set initial step length */
@@ -95,8 +95,15 @@ namespace MeshLib
 			}
 
 			// compute Weighted Delaunay Triangulation
-			if (!__detri2_WDT(pInput, &pTr))
+			bool success = __detri2_WDT(pInput, &pTr);
+
+			if (!success)
 			{
+				//isert your code here
+				// if there are missing points,
+				// roll back the vertex weight
+				// reduce the step length by half
+
 				// if there are missing points,
 				// roll back the vertex weight
 				for (COMTMesh::MeshVertexIterator viter(pInput); !viter.end(); viter++)
@@ -111,6 +118,7 @@ namespace MeshLib
 				// try again
 				continue;
 			}
+
 			// no missing point
 
 			// convert the detri2::Triangulation to OMTMesh
@@ -132,7 +140,7 @@ namespace MeshLib
 
 			break;
 		}
-	};
+	}
 
 	/*! Newton's method to compute the OT Map */
 	void CDomainOptimalTransport::__newton(COMTMesh* pInput,  // input mesh, with vertex->target_area, vertex->dual_area, vertex->weight, vertex->index
