@@ -9,9 +9,14 @@ main:
 Loop:
     li $v0 5             # 调用了输入命令 5 装载到$v0上
     syscall              # 系统调用 
+    beq $v0 $t7 Exit     # 如果输入了128 那么就跳出循环
+    lw $t5 min
+    blt $v0 $t5 Loop
+    lw $t5 max
+    blt $t5 $v0 Loop
     
-    beq $v0 $t7 Exit     # 如果$t1 == $t2 就是说输入了10个数 那么就跳出循环
-    add $t2 $t1 $t0      # 将基准地址 $3 加上偏移量 $4
+    
+    add $t2 $t1 $t0      
     sw $v0 0($t2)        # 将$vo中的数放到t5对应的地址中
     addi $t1 $t1 4       # 偏移量数值提高4个位置
     j Loop               # 跳到新的循环
@@ -107,6 +112,9 @@ Exit1:
  
     min:
     	.word -128
+    	
+    	    max:
+    	.word 127
     end:
     	.word 128
     	
