@@ -19,30 +19,29 @@ main:
        
        la $s1 value1
        
+       move $t4 $t1
 sub1:
-       subi $t1 $t1 1
-       lb $t5 ($t1)
+       subi $t4 $t4 1
+       lb $t5 ($t4)
        
         ble $t5 48 jiewei
         
         subi $t5 $t5 1
-        sb $t5 ($t1)
+        sb $t5 ($t4)
         j finish
        
        jiewei:
        add $t5 $zero 57
-       sb $t5 ($t1)
+       sb $t5 ($t4)
        
        j sub1
        finish:
        
-       move $t1 $s1
-       lb $t0 ($t1)
+       lb $t0 ($t4)
        bne $t0,48 noadding1
-       addi $t1 $t1 1
-       move $s1 $t1
-       returnfromsub1:
-       move $a0 $t1
+       addi $s1 $s1 1
+       noadding1:
+       move $a0 $s1
        
        li $v0 4
        syscall
