@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.6)
 # Name the project
 project(CCGHomework)
 
+SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin) 
+SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+
 if(NOT MSVC)
   set(CMAKE_CXX_FLAGS "-fpermissive")
 endif(NOT MSVC)
