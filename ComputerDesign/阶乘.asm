@@ -12,7 +12,7 @@
     
     
     # Read integer
-         la $a0, value1      #$t0 保存初始值的地址
+         la $a0, value1      #$a0 保存初始值的地址
 	li $a1 30
        li $v0, 8           #读取整数值（kernel serice 8）
        syscall
@@ -20,8 +20,9 @@
        la $s2 value2
        addi $s4 $zero 49
        sb $s4 ($s2)
-       addi  
+       addi  $t2 $s2 1
        
+       lb $t0 empty
        la $t1 value1
        mark1:
        lb $t3 ($t1)
@@ -31,20 +32,24 @@
        
        move $s1 $a0
      
-         la $s3,rst
-       add $s3 $s3 1000
-       lb $s4 empty
-       sb $s4 ($s3)
+
+       la $s7,rst
+       add $t7 $s7 200
        
  loop:
-       la $s3,rst
-       add $t3 $s3 999
+ 
+ move $t3 $t7
+ subi $s3 $t3 200
        
       j setzero
       returnfromsetzero:
       
+      move $t4 $t1
        j multiply
        multiplyreturn:
+       
+      j copy
+      returnfromcopy:
        
        move $t4 $t1
        j sub1
@@ -52,23 +57,18 @@
        
        bne $s1 $t1 loop
 
-       lb $t0, empty
-       la $t7 rst
-       add $t7 $t7 1000
-       sb $t0 ($t7) 
-       subi $t7 $t7 1
-       move $t8 $t7
-       la $t6 rst
+
+
+         la $s3,rst
+       add $s3 $s3 200
+       lb $s4 empty
+       sb $s4 ($s3)
        
-      	 
+       move $a0 $s7
+       li $v0 4
+       syscall
+       
       	
-
-
-    ## END OF YOUR CODE
-  #jr $ra
-  
-  
-     # Exit
     li $v0, 10
     syscall
   
@@ -78,22 +78,31 @@ setzero:
        sub $t3 $t3 1
        bne $s3 $t3 setzero
        j returnfromsetzero
+       
+copy:
+la $s2 value2
+move $t2 $s2
+move $t4 $s7
+loopincopy:
+lb $t5 ($t4)
+sb $t5 ($t2)
+addi $t2 $t2 1
+addi $t4 $t4 1
+bne $t4 $t7 loopincopy
+lb $t5 empty 
+j returnfromcopy
   
 multiply:
-    
-       lb $t0, empty
-       move $t4 $t1
-       
+
+       sub $t6 $t7 1
        out:
        subi $t2 $t2 1
        lb $s5 ($t2)
        addi $s5 $s5 -48
-       
-       
-       move $s7 $t7
+       move $s7 $t6
        inner:
-       subi $t1 $t1 1
-       lb $s6 ($t1)
+       subi $t4 $t4 1
+       lb $s6 ($t4)
        addi $s6 $s6 -48
        mul $s4 $s5 $s6
        lb $s3 ($s7)
@@ -116,9 +125,9 @@ multiply:
        addi $s3 $s3 48
        sb $s3 ($s7)
        
-       bne $t1 $s1 inner
-       move $t1 $t4    
-       subi $t7 $t7 1       
+       bne $t4 $s1 inner
+       move $t4 $t1    
+       subi $t6 $t6 1       
        bne $s2 $t2 out
        
        lb $t0 ($s7)
@@ -147,7 +156,7 @@ sub1:
        j sub1
        finish:
        
-       lb $t0 ($t4)
+       lb $t0 ($s1)
        bne $t0,48 noadding1
        addi $s1 $s1 1
        noadding1:
